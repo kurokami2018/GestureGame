@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Battle Mode" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+         <children>
+            <VBox prefHeight="373.0" prefWidth="600.0">
+               <children>
+                  <Pane prefHeight="45.0" prefWidth="600.0">
+                     <children>
+                        <HBox prefHeight="45.0" prefWidth="600.0">
+                           <children>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="93.0" prefWidth="339.0">
+                                 <children>
+                                    <TextFlow prefHeight="45.0" prefWidth="339.0" />
+                                 </children>
+                              </FlowPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="282.0" prefWidth="600.0">
+                     <children>
+                        <ImageView fitHeight="282.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/iland.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="45.0" prefWidth="600.0">
+                     <children>
+                        <HBox prefHeight="45.0" prefWidth="600.0">
+                           <children>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="45.0" prefWidth="45.0">
+                                 <children>
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="45.0" prefWidth="20.0" />
+                              <FlowPane prefHeight="93.0" prefWidth="339.0">
+                                 <children>
+                                    <TextFlow prefHeight="45.0" prefWidth="339.0" />
+                                 </children>
+                              </FlowPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children></AnchorPane>
+  </content>
+</TitledPane>
