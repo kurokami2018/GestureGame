@@ -53,7 +53,7 @@ public class FaceDetectionDemo {
 //--------------------------------------------------------------------
 // 一枚の画像を読み込んで処理する例
 //--------------------------------------------------------------------
-		Mat input = Imgcodecs.imread("test.jpg"); //画像を読み込む処理。引数はファイルパス
+		Mat input = Imgcodecs.imread("test.png"); //画像を読み込む処理。引数はファイルパス
 		MatOfRect res = fd.execFaceDetection(input); //読み込んだ画像に対し顔検出を実行
 		mip.drawDetectionResults(input, res); //結果を描画
 		vcm.saveImage(input); //結果を描画した画像を保存
