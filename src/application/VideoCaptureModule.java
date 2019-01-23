@@ -115,7 +115,7 @@ public class VideoCaptureModule {
 	public void showImage(Mat image)
 	{
 		//"test"という名前のウインドウで画像表示
-		m_highGui.imshow("test", image);
+		m_highGui.imshow("GestureGame", image);
 	}
 
 	//------------------------------
