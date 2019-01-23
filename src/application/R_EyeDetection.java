@@ -9,6 +9,7 @@ public class R_EyeDetection {
 	public R_EyeDetection() {
 	}
 
+
 	//------------------------------
 	//右目検出を実行する
 	// 検出結果（画像上の座標位置）を返す

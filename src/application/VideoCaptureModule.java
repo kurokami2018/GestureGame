@@ -1,6 +1,7 @@
 package application;
 
 
+
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
