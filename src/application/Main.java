@@ -40,9 +40,11 @@ public class Main extends Application {
 		VideoCaptureModule vcm = new VideoCaptureModule("s");//映像取得モジュールのインスタンス化
 		//FaceDetection fd = new FaceDetection();//顔検出モジュールのインスタンス化
 		MyImageProcessing mip = new MyImageProcessing();//画像処理モジュールのインスタンス化
-		MatOfRect RP_REye,RP_LEye,LP_REye,LP_LEye;
+		MatOfRect RP_REye,RP_LEye,LP_REye,LP_LEye,RP_Mouth,LP_Mouth;
 		R_EyeDetection reye = new R_EyeDetection();
 		L_EyeDetection leye = new L_EyeDetection();
+		MouthDetection mouth = new MouthDetection();
+
 		Mat image;
 		Rect imageR_rect,imageL_rect;
 
@@ -64,12 +66,15 @@ public class Main extends Application {
 			//MatOfRect morR = fd.execFaceDetection(image.submat(imageR_rect)); //顔検出を実行
 			RP_REye=reye.execEyeDetection(image.submat(imageR_rect));//右目検知を実行
 			RP_LEye=leye.execEyeDetection(image.submat(imageR_rect));//左目検知を実行
+			RP_Mouth = mouth.execMouthDetection(image.submat(imageR_rect));
 			if(!RP_REye.empty());//もし右目が検知されたら...の処理を書くところ
 			if(!RP_LEye.empty());//もし左目が検知されたら...の処理を書くところ
+			if(!RP_Mouth.empty());//もし口が検知されたら...の処理を書くところ
 
 			//mip.drawDetectionResultsByShiftingHalf(image, morR); //顔位置に矩形を描画
 			mip.drawDetectionResultsByShiftingHalf(image, RP_REye);//右目位置に矩形を描写
 			mip.drawDetectionResultsByShiftingHalf(image, RP_LEye);//左目位置に矩形を描写
+			mip.drawDetectionResultsByShiftingHalf(image, RP_Mouth);//口位置に矩形を描写
 
 
 
@@ -80,12 +85,15 @@ public class Main extends Application {
 			//MatOfRect morL = fd.execFaceDetection(image.submat(imageL_rect)); //顔検出を実行
 			LP_REye=reye.execEyeDetection(image.submat(imageL_rect));//右目検知を実行
 			LP_LEye=leye.execEyeDetection(image.submat(imageL_rect));//左目検知を実行
+			LP_Mouth = mouth.execMouthDetection(image.submat(imageL_rect));
 			if(!LP_REye.empty());//もし右目が検知されたら...の処理を書くところ
 			if(!LP_LEye.empty());//もし左目が検知されたら...の処理を書くところ
+			if(!LP_Mouth.empty());//もし口が検知されたら...の処理を書くところ
 
 			//mip.drawDetectionResults(image, morL); //顔位置に矩形を描画
 			mip.drawDetectionResults(image, LP_REye);//右目位置に矩形を描写
 			mip.drawDetectionResults(image, LP_LEye);//左目位置に矩形を描写
+			mip.drawDetectionResults(image, LP_Mouth);//口位置に矩形を描写
 
 
 
