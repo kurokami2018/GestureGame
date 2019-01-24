@@ -67,6 +67,8 @@ public class FaceDetectionDemo {
 		while(vcm.isCameraOpened())
 		{
 			Mat image = vcm.getFrameFromCamera(); //カメラ映像から画像を一枚取り出す
+			//Mat imageR=new Mat(image,new Range(0,image.height()),new Range(image.width()/2,image.width()));
+
 
 			MatOfRect mor = fd.execFaceDetection(image); //顔検出を実行
 			mip.drawDetectionResults(image, mor); //顔位置に矩形を描画

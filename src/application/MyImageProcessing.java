@@ -54,4 +54,12 @@ public class MyImageProcessing {
 					new Scalar (0,0,255), 5);
 		}
 	}
+	public void drawDetectionResultsByShiftingHalf(Mat img, MatOfRect mor) {
+		for(Rect rect : mor.toArray()) {
+
+			Imgproc.rectangle(img,  new Point(rect.x+(img.cols()/2) , rect.y),
+					new Point (rect.x+(img.cols()/2) +rect.width, rect.y+rect.height),
+					new Scalar (0,0,255), 5);
+		}
+	}
 }
