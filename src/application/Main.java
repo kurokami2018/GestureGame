@@ -4,6 +4,8 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -41,9 +43,9 @@ public class Main extends Application {
 		//FaceDetection fd = new FaceDetection();//顔検出モジュールのインスタンス化
 		MyImageProcessing mip = new MyImageProcessing();//画像処理モジュールのインスタンス化
 		MatOfRect RP_REye,RP_LEye,LP_REye,LP_LEye,RP_Mouth,LP_Mouth;
-		R_EyeDetection reye = new R_EyeDetection();
-		L_EyeDetection leye = new L_EyeDetection();
-		MouthDetection mouth = new MouthDetection();
+		R_EyeDetection reye = new R_EyeDetection();//右目検出モジュールのインスタンス化
+		L_EyeDetection leye = new L_EyeDetection();//左目検出モジュールのインスタンス化
+		MouthDetection mouth = new MouthDetection();//口検出モジュールのインスタンス化
 
 		Mat image;
 		Rect imageR_rect,imageL_rect;
@@ -52,13 +54,15 @@ public class Main extends Application {
 		{
 			image = vcm.getFrameFromCamera(); //カメラ映像から画像を一枚取り出す
 
+			//---------------------------
+			//カメラ画像の縮小（処理高速化のため）
+			double ratio = 0.5; //入力画像を縮小する割合
+			Imgproc.resize(image, image, new Size(0, 0), ratio, ratio);
+
+			//---------------------------
+
 			imageR_rect=new Rect(image.cols()/2-1,0,image.cols()/2,image.rows());//画面から見て右側の人の領域を定義
 			imageL_rect=new Rect(0,0,image.cols()/2,image.rows());//画面から見て左側の人の領域を定義
-			//カメラの実験をすると以下のような結果に、
-			//RGBということchannels()=3,2次元配列であるということで動画なら3になるはずdims()=2,行cols()=1280,列rows()=720
-
-
-
 
 			//************************   画面からみて右側のプレイヤーの検知  ***************************
 			//
@@ -100,14 +104,13 @@ public class Main extends Application {
 
 			//*************************************************************************************
 
-
-
 			vcm.showImage(image);//色々処理された後のimage(カメラから取得された画像)を描写する
 
-			if(camController != 1)break;
-			if(image.empty())break;
-			int key = vcm.getInputKey();
-			if(key == 81)break;
+
+			if(camController != 1)break;//camControllerが1に設定されたらカメラを止める
+			if(image.empty())break;//もしカメラがうまく起動しなかった時にカメラを止める
+			int key = vcm.getInputKey();//カメラ起動中にキーボードに入力されたキーを取得
+			if(key == 81)break;//もしqのキーだったらカメラを止める
 
 		}
 		vcm.stopVideoCapture();
