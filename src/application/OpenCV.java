@@ -34,7 +34,7 @@ public class  OpenCV extends Thread{
 			//---------------------------
 			//カメラ画像の縮小（処理高速化のため）
 			double ratio = 0.5; //入力画像を縮小する割合
-			Imgproc.resize(image, image, new Size(0, 0), ratio, ratio);
+			//Imgproc.resize(image, image, new Size(0, 0), ratio, ratio);
 
 			//---------------------------
 
