@@ -7,37 +7,14 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 
-
-public class Main extends Application {
+public class  OpenCV extends Thread{
 	static int camController = 1;//1でオン、0でおふ
 
-	@Override
-	public void start(Stage primaryStage) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("BattleMode.fxml"));
-			Scene scene = new Scene(root);
-			primaryStage.setScene(scene);
-			primaryStage.show();
 
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public void run(){
 
-	public static void main(String[] args) {
-		//launch(args);
-		Detection();
-	}
-
-
-	public static void Detection() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);//OpenCVを使うために必ず入れる一行
 		VideoCaptureModule vcm = new VideoCaptureModule("s");//映像取得モジュールのインスタンス化
 		//FaceDetection fd = new FaceDetection();//顔検出モジュールのインスタンス化
@@ -50,8 +27,8 @@ public class Main extends Application {
 		Mat image;
 		Rect imageR_rect,imageL_rect;
 
-		while(vcm.isCameraOpened())
-		{
+		while(vcm.isCameraOpened()){
+
 			image = vcm.getFrameFromCamera(); //カメラ映像から画像を一枚取り出す
 
 			//---------------------------
@@ -114,6 +91,7 @@ public class Main extends Application {
 
 		}
 		vcm.stopVideoCapture();
+
 
 	}
 

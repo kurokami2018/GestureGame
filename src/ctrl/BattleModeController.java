@@ -1,5 +1,12 @@
 package ctrl;
 
+import application.OpenCV;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 /*
  * このクラスはBattleMode.fxmlのコントローラで、何かイベントが起きた時にする処理を記述してあります。
  * ・右目が隠された時に右側に移動する処理
@@ -11,7 +18,24 @@ package ctrl;
  */
 
 
-public class BattleModeController {
+public class BattleModeController extends Application{
+	OpenCV opencvThread=new OpenCV();
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("../application/BattleMode.fxml"));
+			Scene scene = new Scene(root);
+			primaryStage.setScene(scene);
+			primaryStage.show();
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		opencvThread.start();
+	}
+	public static void main(String args[]) {
+		launch(args);
+	}
 
 
 }
