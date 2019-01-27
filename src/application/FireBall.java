@@ -1,5 +1,10 @@
 package application;
 
+import java.nio.file.Paths;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 /*
  * 移動処理メソッド
  * (当たり時画像差し替えメソッド)
@@ -8,14 +13,25 @@ package application;
 
 public class FireBall {
 
-	int x,y;
+	double x,y;
+	long generatedTime=0;
+	public ImageView imgV = new ImageView(new Image(Paths.get("././image/hp.jpg").toUri().toString(), true));//url適当
 
-	public FireBall(int player,int y) {//プレイヤー番号とプレイヤーのy座標を受け取る
-		if(player==1) this.x=90;
+	public FireBall(double x,double y) {//プレイヤーのy座標とプレイヤーのy座標を受け取る
+		/*if(player==1) this.x=90;
 		else if(player==2) this.x=490;
-		else throw new IllegalArgumentException("non-existent player");
+		else throw new IllegalArgumentException("non-existent player");*/
+		this.x=x;
 		this.y=y+25;
+		generatedTime=System.currentTimeMillis();
+		imgV.setLayoutY(y);
 	}
+	public double getX(long now) {
+		return (int) ((now-generatedTime)*30);
+	}
+	public double getY() {return y;}
+
+
 	/*Fighterクラスに移行
 	public void shoot(int player) {
 

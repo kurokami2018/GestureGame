@@ -1,10 +1,15 @@
 package ctrl;
 
+import application.Fighter;
+import application.FireBall;
 import application.OpenCV;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TitledPane;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /*
@@ -20,22 +25,97 @@ import javafx.stage.Stage;
 
 public class BattleModeController extends Application{
 	OpenCV opencvThread=new OpenCV();
+	public static Fighter RFighter,LFighter;
+	final double defaultXOfR = 133;
+	final double defaultXOfL = 0;
+	final double defaultY = 133;
+
+
+
+	@FXML private ImageView hp1;
+	@FXML private ImageView hp2;
+	@FXML private ImageView hp3;
+	@FXML private ImageView hp4;
+	@FXML private ImageView hp5;
+	@FXML private ImageView hp6;
+
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws Exception {
+		OpenCV opencvThread=new OpenCV();
+		RFighter = new Fighter(defaultXOfR);
+		LFighter = new Fighter(defaultXOfL);
+
+
+		// TODO 自動生成されたメソッド・スタブ
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("../application/BattleMode.fxml"));
-			Scene scene = new Scene(root);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+		//***************************************************
+		primaryStage.setTitle("BattleMode");
+		//FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BattleMode.fxml"));
+		//TitledPane root = fxmlLoader.load();
+		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../application/BattleMode.fxml"));
+		loader.setController(opencvThread); //fxmlファイルのcontrollerとしてOpenCV.javaを読み込む
+		TitledPane root = loader.load();
+		Scene scence = new Scene(root);
+        primaryStage.setScene(scence);
+		primaryStage.show();
+		//***************************************************
+		hp1=(ImageView)loader.getNamespace().get("hp1");
+		hp2=(ImageView)loader.getNamespace().get("hp2");
+		hp3=(ImageView)loader.getNamespace().get("hp3");
+		hp4=(ImageView)loader.getNamespace().get("hp4");
+		hp5=(ImageView)loader.getNamespace().get("hp5");
+		hp6=(ImageView)loader.getNamespace().get("hp6");
+
+
+		// ここのhandle(){の部分}に書いた処理は繰り返し実行され続ける。だいたい1秒に1回の頻度らしい。
+
+		new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				// TODO 自動生成されたメソッド・スタブ
+				if(RFighter.getLife()==0 || LFighter.getLife()==0)stop();
+				//もしRFighterが攻撃していたら、火球を描写する
+				for(FireBall fb:RFighter.list) {
+					fb.imgV.setLayoutX(fb.getX(System.currentTimeMillis()));
+				}
+
+			}
+		}.start();
+		//*****************************************************
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		opencvThread.start();
+		Thread thread = new Thread(opencvThread);
+		thread.start();//openCVのスレッドを開始する。
 	}
-	public static void main(String args[]) {
+
+	public void setLife() {
+		int lLife=LFighter.getLife();
+		if(lLife!=3) {
+			if(lLife==2)hp1.setVisible(false);
+			else if(lLife==1)hp2.setVisible(false);
+			else {
+				hp3.setVisible(false);
+				//LFighterの負けが確定する
+			}
+		}
+		int rLife=RFighter.getLife();
+		if(rLife!=3) {
+			if(rLife==2)hp4.setVisible(false);
+			else if(rLife==1)hp5.setVisible(false);
+			else {
+				hp6.setVisible(false);
+				//RFighterの負けが確定する
+			}
+		}
+	}
+
+
+
+	public static void main(String[] args) {//ここはもういじらない。
 		launch(args);
 	}
 
-
 }
+
