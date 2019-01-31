@@ -1,5 +1,7 @@
 package application;
 
+import java.nio.file.Paths;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
@@ -7,25 +9,20 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import ctrl.BattleModeController;
 import javafx.fxml.FXML;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 
-
-
-
-
-
-public class OpenCV extends TitledPane implements Runnable{
-
-
+public class OpenCV extends BattleModeController implements Runnable{
     static int camController = 1;//1でオン、0でおふ
-
+    
     @FXML private ImageView player1;//初期化せずともfxmlのfx:idと同じ名前をつけておけば勝手に中身が入るって
     @FXML private ImageView player2;
-
+    
     public static Fighter RFighter,LFighter;
-
     final double defaultXOfR = 133;
     final double defaultXOfL = 0;
 
@@ -35,7 +32,6 @@ public class OpenCV extends TitledPane implements Runnable{
 
     @FXML
     public void run(){
-
     	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);//OpenCVを使うために必ず入れる一行
 
     	VideoCaptureModule vcm = new VideoCaptureModule("s");//映像取得モジュールのインスタンス化
@@ -51,10 +47,9 @@ public class OpenCV extends TitledPane implements Runnable{
     	LFighter = new Fighter(defaultXOfL);
 
     	Mat image;
-    	Rect[] imageR_rect=new Rect[2];
-    	Rect[] imageL_rect=new Rect[2];
-
-
+    	Rect[] imageR_rect=new Rect[4];
+    	Rect[] imageL_rect=new Rect[4];
+    	
     	while(vcm.isCameraOpened()){
     		image = vcm.getFrameFromCamera(); //カメラ映像から画像を一枚取り出す
 	    	//---------------------------
@@ -66,27 +61,39 @@ public class OpenCV extends TitledPane implements Runnable{
     		Imgproc.cvtColor(image, image, Imgproc.COLOR_RGB2GRAY);
     		Imgproc.equalizeHist(image, image);
     		//----------------------------
-
+    		imageR_rect[3]=new Rect(image.cols()/2-1,0,image.cols()/2,image.rows());//画面から見て右側の人の領域を定義
+    		imageL_rect[3]=new Rect(0,0,image.cols()/2,image.rows());//画面から見て左側の人の領域を定義
     		imageR_rect[0]=new Rect(image.cols()/2-1,0,image.cols()/2,image.rows());//画面から見て右側の人の領域を定義
-    		imageL_rect[0]=new Rect(0,0,image.cols()/2,image.rows());//画面から見て左側の人の領域を定義
-
-    		imageR_rect[1]=new Rect(image.cols()/2,0,image.cols()/2,image.rows()/2);//画面から見て右側の人の上領域を定義
-    		imageL_rect[1]=new Rect(0,0,image.cols()/2,image.rows()/2);//画面から見て左側の人の上領域を定義
+    		imageL_rect[0]=new Rect(0,0,image.cols()/2,image.rows()/2);//画面から見て左側の人の領域を定義
+    		/* 領域を1/4に分けてます */
+    		imageR_rect[1]=new Rect(image.cols()/2,0,image.cols()/4,image.rows()/2);//画面から見て右側の人の上領域を定義
+    		imageR_rect[2]=new Rect(image.cols()*3/4,0,image.cols()/4,image.rows()/2);//画面から見て右側の人の上領域を定義
+    		imageL_rect[1]=new Rect(0,0,image.cols()/4,image.rows()/2);//画面から見て左側の人の上領域を定義
+    		imageL_rect[2]=new Rect(image.cols()/4,0,image.cols()/4,image.rows()/2);//画面から見て左側の人の上領域を定義
 
     		//************************   画面からみて右側のプレイヤーの検知  ***************************
     		//
     		//MatOfRect morR = fd.execFaceDetection(image.submat(imageR_rect)); //顔検出を実行
-    		RP_REye=reye.execEyeDetection(image.submat(imageR_rect[1]));//右目検知を実行
+    		RP_REye=reye.execEyeDetection(image.submat(imageR_rect[2]));//右目検知を実行
     		RP_LEye=leye.execEyeDetection(image.submat(imageR_rect[1]));//左目検知を実行
-    		RP_Mouth = mouth.execMouthDetection(image.submat(imageR_rect[0]));
+    		RP_Mouth = mouth.execMouthDetection(image.submat(imageR_rect[3]));
     		if(RP_REye.empty()) {//もし右目が隠されたのが検知されたら...の処理を書くところ
-    			MoveOfFighter_L(-10);
+    			RFighter.move(-5);
     		}
     		if(RP_LEye.empty()) {//もし左目が隠されたのが検知されたら...の処理を書くところ
-    			MoveOfFighter_L(10);
+    			RFighter.move(5);
     		}
-    		if(RP_Mouth.empty())RFighter.shoot();;//もし口が隠されたのが検知されたら...の処理を書くところ
-
+    		
+    		if(RP_Mouth.empty() && gun_R == false) {
+    			fR = new FireBall(180,RFighter.getY());
+    			fireBall_R.setTranslateX(fR.getX());
+    			fireBall_R.setTranslateY(fR.getY());
+    			fireBall_R.setOpacity(1);
+    			gun_R=true;
+    			//RFighter.shoot();//もし口が隠されたのが検知されたら...の処理を書くところ
+    		}
+    		RP_REye=reye.execEyeDetection(image.submat(imageR_rect[0]));//右目検知(描画用データ)
+    		RP_LEye=leye.execEyeDetection(image.submat(imageR_rect[0]));//左目検知(描画用データ)
     		//mip.drawDetectionResultsByShiftingHalf(image, morR); //顔位置に黒い矩形を描画
     		mip.drawDetectionResultsByShiftingHalf(image, RP_REye,cR);//右目位置に黒色の矩形を描写
     		mip.drawDetectionResultsByShiftingHalf(image, RP_LEye,cL);//左目位置に灰色の矩形を描写
@@ -96,45 +103,67 @@ public class OpenCV extends TitledPane implements Runnable{
     		//
     		//MatOfRect morL = fd.execFaceDetection(image.submat(imageL_rect)); //顔検出を実行
     		LP_REye=reye.execEyeDetection(image.submat(imageL_rect[1]));//右目検知を実行
-    		LP_LEye=leye.execEyeDetection(image.submat(imageL_rect[1]));//左目検知を実行
-    		LP_Mouth = mouth.execMouthDetection(image.submat(imageL_rect[0]));
+    		LP_LEye=leye.execEyeDetection(image.submat(imageL_rect[2]));//左目検知を実行
+    		LP_Mouth = mouth.execMouthDetection(image.submat(imageL_rect[3]));
     		if(LP_REye.empty()) {//もし右目が隠されたのが検知されたら...の処理を書くところ
-    			MoveOfFighter_R(-10);
+    			LFighter.move(-5);
     		}
     		if(LP_LEye.empty()) {//もし左目が隠されたのが検知されたら...の処理を書くところ
-    			MoveOfFighter_R(10);
+    			LFighter.move(5);
     		}
-    		if(LP_Mouth.empty())LFighter.shoot();//もし口が隠されたのが検知されたら...の処理を書くところ
-
+    		if(LP_Mouth.empty() && gun_L == false) {
+        			fL = new FireBall(-180,LFighter.getY());
+        			fireBall_L.setTranslateX(fL.getX());
+        			fireBall_L.setTranslateY(fL.getY());
+        			fireBall_L.setOpacity(1);
+        			gun_L=true;
+        			//LFighter.shoot();//もし口が隠されたのが検知されたら...の処理を書くところ
+        		}
+    	
+    		LP_REye=reye.execEyeDetection(image.submat(imageL_rect[0]));//右目検知(描画用データ)
+    		LP_LEye=leye.execEyeDetection(image.submat(imageL_rect[0]));//左目検知(描画用データ)
     		//mip.drawDetectionResults(image, morL); //顔位置に矩形を描画
     		mip.drawDetectionResults(image, LP_REye,cR);//右目位置に黒色の矩形を描写
     		mip.drawDetectionResults(image, LP_LEye,cL);//左目位置に灰色の矩形を描写
     		mip.drawDetectionResults(image, LP_Mouth,cM);//口位置に白の矩形を描写
 
     		//**********************************************************************************
-
+    		MoveOfFighter();
 
     		vcm.showImage(image);//色々処理された後のimage(カメラから取得された画像)を描写する
     		if(camController != 1)break;//camControllerが1に設定されたらカメラを止める
     		if(image.empty())break;//もしカメラがうまく起動しなかった時にカメラを止める
     		int key = vcm.getInputKey();//カメラ起動中にキーボードに入力されたキーを取得
-    		if(key == 81)break;//もしqのキーだったらカメラを止める
+    		if(key == 81) { break; }//もしqのキーだったら
+
+    		if(gun_R) {
+    			fR.setX(-30);
+    			fireBall_R.setLayoutX(fR.getX());
+    			if(fR.getX()<-180) {
+    				fireBall_R.setOpacity(0);
+    	   			fireBall_R.setTranslateX(fR.getX());
+        			fireBall_R.setTranslateY(fR.getY());
+        			gun_R=false;
+    			}
+    		}
+    		if(gun_L) {
+    			fL.setX(30);
+    			fireBall_L.setLayoutX(fL.getX());
+    			if(fL.getX()>180) {
+    				fireBall_L.setOpacity(0);
+    	   			fireBall_L.setTranslateX(fL.getX());
+        			fireBall_L.setTranslateY(fL.getY());
+        			gun_L=false;
+    			}
+    		}	
     	}
-
-    	vcm.stopVideoCapture();
-
+    	vcm.stopVideoCapture();  		
     }
-
-
     public Fighter getRFighter() {return RFighter;}
     public Fighter getLFighter() {return LFighter;}
-    @FXML
-    private void MoveOfFighter_R(double b) {
-    	RFighter.move(b);
-    	player2.setTranslateY(b);
-    }
-    @FXML
-    private void MoveOfFighter_L(double b) {
-    	player1.setTranslateY(b);
-    }
+	@FXML
+	public void MoveOfFighter() {
+		player2.setLayoutY(RFighter.getY());
+		player1.setLayoutY(LFighter.getY());
+	}
 }

@@ -13,24 +13,25 @@ import javafx.scene.image.ImageView;
 
 public class FireBall {
 
-	double x,y;
-	long generatedTime=0;
-	public ImageView imgV = new ImageView(new Image(Paths.get("././image/hp.jpg").toUri().toString(), true));//url適当
-
+	double x=0,y=0;
+//	long generatedTime=0;
+//	public ImageView imgV = new ImageView(new Image(Paths.get("././image/hp.jpg").toUri().toString(), true));//url適当
+	public Image img = new Image(Paths.get("././image/hp.jpg").toUri().toString(), true);//url適当
 	public FireBall(double x,double y) {//プレイヤーのy座標とプレイヤーのy座標を受け取る
 		/*if(player==1) this.x=90;
 		else if(player==2) this.x=490;
 		else throw new IllegalArgumentException("non-existent player");*/
 		this.x=x;
-		this.y=y+25;
-		generatedTime=System.currentTimeMillis();
-		imgV.setLayoutY(y);
+		this.y=y;//+25;
+//		generatedTime=System.currentTimeMillis();
+//		imgV.setLayoutY(y);
 	}
-	public double getX(long now) {
-		return (int) ((now-generatedTime)*30);
-	}
+//	public double getX(long now) {
+//		return (int) ((now-generatedTime)*30);
+//	}
+	public double getX() {return x;}
+	public void setX(double i) { x+=i;}
 	public double getY() {return y;}
-
 
 	/*Fighterクラスに移行
 	public void shoot(int player) {

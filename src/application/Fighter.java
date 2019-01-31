@@ -13,7 +13,7 @@ import java.util.List;
  *    勝敗決定メソッド
  */
 public class Fighter {
-	final static public double defaultY = 133;
+	final static public double defaultY = 30;//133;
 
 	int life=0; //残機
 	double x=0,y=defaultY;
@@ -22,24 +22,19 @@ public class Fighter {
 	public double survivalTime=0.0;
 	long generatedTime=0;
 
-
 	public Fighter(double x){//コンストラクタ
 		life=3;
 		this.x=x;
+		this.y=defaultY;
 		this.generatedTime=System.currentTimeMillis();
 	}
-
 	public void setSurvivalTime() {
 		long now=System.currentTimeMillis();
 		this.survivalTime=now-generatedTime;
 	}
-
 	public int getLife() { return life; }
-
 	public void setY(double y) {this.y=y;}
-
 	public double getY() { return y; }
-
 	public double getX() {return x;}
 	public int judge() { //当たり判定
 		int judge=0; //0:なし 1:当たり

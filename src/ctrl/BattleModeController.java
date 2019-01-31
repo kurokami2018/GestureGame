@@ -1,5 +1,7 @@
 package ctrl;
 
+import java.nio.file.Paths;
+
 import application.Fighter;
 import application.FireBall;
 import application.OpenCV;
@@ -9,7 +11,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 /*
@@ -21,17 +25,18 @@ import javafx.stage.Stage;
  * ・攻撃が当たって残基の数が0になった時に勝ちと負けを表示する処理
  * ・勝ち負けが決まって表示された時にもう一度プレイする選択肢を提示する処理
  */
-
-
 public class BattleModeController extends Application{
-	OpenCV opencvThread=new OpenCV();
 	public static Fighter RFighter,LFighter;
+	protected Scene scence;
 	final double defaultXOfR = 133;
 	final double defaultXOfL = 0;
-	final double defaultY = 133;
-
-
-
+	final double defaultY = 50;//133;
+    public static boolean gun_R,gun_L;
+    public FireBall fR,fL;
+    @FXML                        
+    protected ImageView fireBall_R;
+    @FXML
+	protected ImageView fireBall_L;
 	@FXML private ImageView hp1;
 	@FXML private ImageView hp2;
 	@FXML private ImageView hp3;
@@ -44,8 +49,6 @@ public class BattleModeController extends Application{
 		OpenCV opencvThread=new OpenCV();
 		RFighter = new Fighter(defaultXOfR);
 		LFighter = new Fighter(defaultXOfL);
-
-
 		// TODO 自動生成されたメソッド・スタブ
 		try {
 		//***************************************************
@@ -55,7 +58,7 @@ public class BattleModeController extends Application{
 		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../application/BattleMode.fxml"));
 		loader.setController(opencvThread); //fxmlファイルのcontrollerとしてOpenCV.javaを読み込む
 		TitledPane root = loader.load();
-		Scene scence = new Scene(root);
+		scence = new Scene(root);
         primaryStage.setScene(scence);
 		primaryStage.show();
 		//***************************************************
@@ -66,10 +69,9 @@ public class BattleModeController extends Application{
 		hp5=(ImageView)loader.getNamespace().get("hp5");
 		hp6=(ImageView)loader.getNamespace().get("hp6");
 
-
 		// ここのhandle(){の部分}に書いた処理は繰り返し実行され続ける。だいたい1秒に1回の頻度らしい。
 
-		new AnimationTimer() {
+	/*	new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				// TODO 自動生成されたメソッド・スタブ
@@ -80,16 +82,15 @@ public class BattleModeController extends Application{
 				}
 
 			}
-		}.start();
+		}.start();*/
 		//*****************************************************
-
+	
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		Thread thread = new Thread(opencvThread);
 		thread.start();//openCVのスレッドを開始する。
 	}
-
 	public void setLife() {
 		int lLife=LFighter.getLife();
 		if(lLife!=3) {
@@ -110,12 +111,22 @@ public class BattleModeController extends Application{
 			}
 		}
 	}
-
-
-
 	public static void main(String[] args) {//ここはもういじらない。
 		launch(args);
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
