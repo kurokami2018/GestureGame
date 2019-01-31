@@ -15,8 +15,8 @@ public class FireBall {
 
 	double x=0,y=0;
 //	long generatedTime=0;
-//	public ImageView imgV = new ImageView(new Image(Paths.get("././image/hp.jpg").toUri().toString(), true));//url適当
-	public Image img = new Image(Paths.get("././image/hp.jpg").toUri().toString(), true);//url適当
+//	public ImageView imgV = new ImageView(new Image(Paths.get("././image/fireball.jpg").toUri().toString(), true));//url適当
+	public Image img = new Image(Paths.get("././image/fireball.jpg").toUri().toString(), true);//url適当
 	public FireBall(double x,double y) {//プレイヤーのy座標とプレイヤーのy座標を受け取る
 		/*if(player==1) this.x=90;
 		else if(player==2) this.x=490;

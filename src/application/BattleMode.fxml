@@ -50,15 +50,15 @@
                            <children>
                               <ImageView fx:id="fireBall_R" fitHeight="50.0" fitWidth="20.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../img/hp.png" />
-                                 </image>   
+                                    <Image url="@../../img/fireball.png" />
+                                 </image>
                               </ImageView>
                            </children></Pane>
                         <Pane layoutX="480.0" layoutY="148.0" prefHeight="30.0" prefWidth="30.0">
                            <children>
                               <ImageView fx:id="fireBall_L" fitHeight="50.0" fitWidth="20.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../img/hp.png" />
+                                    <Image url="@../../img/fireball.png" />
                                  </image>
                               </ImageView>
                            </children>
