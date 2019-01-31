@@ -1,19 +1,14 @@
 package ctrl;
 
-import java.nio.file.Paths;
-
 import application.Fighter;
 import application.FireBall;
 import application.OpenCV;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TitledPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 /*
@@ -33,16 +28,17 @@ public class BattleModeController extends Application{
 	final double defaultY = 50;//133;
     public static boolean gun_R,gun_L;
     public FireBall fR,fL;
-    @FXML                        
+    @FXML
     protected ImageView fireBall_R;
     @FXML
 	protected ImageView fireBall_L;
-	@FXML private ImageView hp1;
-	@FXML private ImageView hp2;
-	@FXML private ImageView hp3;
-	@FXML private ImageView hp4;
-	@FXML private ImageView hp5;
-	@FXML private ImageView hp6;
+	@FXML protected ImageView hp1;
+	@FXML protected ImageView hp2;
+	@FXML protected ImageView hp3;
+	@FXML protected ImageView hp4;
+	@FXML protected ImageView hp5;
+	@FXML protected ImageView hp6;
+
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -61,13 +57,14 @@ public class BattleModeController extends Application{
 		scence = new Scene(root);
         primaryStage.setScene(scence);
 		primaryStage.show();
+
 		//***************************************************
-		hp1=(ImageView)loader.getNamespace().get("hp1");
+		/*hp1=(ImageView)loader.getNamespace().get("hp1");
 		hp2=(ImageView)loader.getNamespace().get("hp2");
 		hp3=(ImageView)loader.getNamespace().get("hp3");
 		hp4=(ImageView)loader.getNamespace().get("hp4");
 		hp5=(ImageView)loader.getNamespace().get("hp5");
-		hp6=(ImageView)loader.getNamespace().get("hp6");
+		hp6=(ImageView)loader.getNamespace().get("hp6");*/
 
 		// ここのhandle(){の部分}に書いた処理は繰り返し実行され続ける。だいたい1秒に1回の頻度らしい。
 
@@ -84,33 +81,14 @@ public class BattleModeController extends Application{
 			}
 		}.start();*/
 		//*****************************************************
-	
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		Thread thread = new Thread(opencvThread);
 		thread.start();//openCVのスレッドを開始する。
 	}
-	public void setLife() {
-		int lLife=LFighter.getLife();
-		if(lLife!=3) {
-			if(lLife==2)hp1.setVisible(false);
-			else if(lLife==1)hp2.setVisible(false);
-			else {
-				hp3.setVisible(false);
-				//LFighterの負けが確定する
-			}
-		}
-		int rLife=RFighter.getLife();
-		if(rLife!=3) {
-			if(rLife==2)hp4.setVisible(false);
-			else if(rLife==1)hp5.setVisible(false);
-			else {
-				hp6.setVisible(false);
-				//RFighterの負けが確定する
-			}
-		}
-	}
+
 	public static void main(String[] args) {//ここはもういじらない。
 		launch(args);
 	}

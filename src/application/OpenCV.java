@@ -1,7 +1,5 @@
 package application;
 
-import java.nio.file.Paths;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
@@ -11,17 +9,15 @@ import org.opencv.imgproc.Imgproc;
 
 import ctrl.BattleModeController;
 import javafx.fxml.FXML;
-import javafx.scene.control.TitledPane;
-import javafx.scene.image.Image;
+import javafx.geometry.Bounds;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 
 public class OpenCV extends BattleModeController implements Runnable{
     static int camController = 1;//1でオン、0でおふ
-    
+
     @FXML private ImageView player1;//初期化せずともfxmlのfx:idと同じ名前をつけておけば勝手に中身が入るって
     @FXML private ImageView player2;
-    
+
     public static Fighter RFighter,LFighter;
     final double defaultXOfR = 133;
     final double defaultXOfL = 0;
@@ -49,7 +45,7 @@ public class OpenCV extends BattleModeController implements Runnable{
     	Mat image;
     	Rect[] imageR_rect=new Rect[4];
     	Rect[] imageL_rect=new Rect[4];
-    	
+
     	while(vcm.isCameraOpened()){
     		image = vcm.getFrameFromCamera(); //カメラ映像から画像を一枚取り出す
 	    	//---------------------------
@@ -83,7 +79,7 @@ public class OpenCV extends BattleModeController implements Runnable{
     		if(RP_LEye.empty()) {//もし左目が隠されたのが検知されたら...の処理を書くところ
     			RFighter.move(5);
     		}
-    		
+
     		if(RP_Mouth.empty() && gun_R == false) {
     			fR = new FireBall(180,RFighter.getY());
     			fireBall_R.setTranslateX(fR.getX());
@@ -119,7 +115,7 @@ public class OpenCV extends BattleModeController implements Runnable{
         			gun_L=true;
         			//LFighter.shoot();//もし口が隠されたのが検知されたら...の処理を書くところ
         		}
-    	
+
     		LP_REye=reye.execEyeDetection(image.submat(imageL_rect[0]));//右目検知(描画用データ)
     		LP_LEye=leye.execEyeDetection(image.submat(imageL_rect[0]));//左目検知(描画用データ)
     		//mip.drawDetectionResults(image, morL); //顔位置に矩形を描画
@@ -139,25 +135,40 @@ public class OpenCV extends BattleModeController implements Runnable{
     		if(gun_R) {
     			fR.setX(-30);
     			fireBall_R.setLayoutX(fR.getX());
-    			if(fR.getX()<-180) {
+    			if(fR.getX()<-240) {
     				fireBall_R.setOpacity(0);
     	   			fireBall_R.setTranslateX(fR.getX());
         			fireBall_R.setTranslateY(fR.getY());
         			gun_R=false;
     			}
+    			Bounds boundsPlayer2 = player2.getBoundsInParent();
+    			Bounds boundsFireBallL_1 = fireBall_L.getBoundsInParent();
+    			if(boundsPlayer2.intersects(boundsFireBallL_1)) {
+    				if(LFighter.life>=0)RFighter.life-=1;
+    				System.out.println("右側のプレイヤーが被弾しました。残機は...");
+    				System.out.println(RFighter.getLife());
+    			}
     		}
     		if(gun_L) {
     			fL.setX(30);
     			fireBall_L.setLayoutX(fL.getX());
-    			if(fL.getX()>180) {
+    			if(fL.getX()>240) {
     				fireBall_L.setOpacity(0);
     	   			fireBall_L.setTranslateX(fL.getX());
         			fireBall_L.setTranslateY(fL.getY());
         			gun_L=false;
     			}
-    		}	
+    			Bounds boundsPlayer1 = player1.getBoundsInParent();
+    			Bounds boundsFireBallR_1 = fireBall_R.getBoundsInParent();
+    			if(boundsPlayer1.intersects(boundsFireBallR_1)) {
+    				if(LFighter.life>=0)LFighter.life-=1;
+    				System.out.println("左側のプレイヤーが被弾しました。残機は...");
+    				System.out.println(LFighter.getLife());
+    			}
+    		}
+    		setLife();
     	}
-    	vcm.stopVideoCapture();  		
+    	vcm.stopVideoCapture();
     }
     public Fighter getRFighter() {return RFighter;}
     public Fighter getLFighter() {return LFighter;}
@@ -165,5 +176,26 @@ public class OpenCV extends BattleModeController implements Runnable{
 	public void MoveOfFighter() {
 		player2.setLayoutY(RFighter.getY());
 		player1.setLayoutY(LFighter.getY());
+	}
+	@FXML
+	public void setLife() {
+		int lLife=LFighter.getLife();
+		if(lLife!=3) {
+			if(lLife==2)hp1.setVisible(false);
+			else if(lLife==1)hp2.setVisible(false);
+			else {
+				hp3.setVisible(false);
+				//LFighterの負けが確定する
+			}
+		}
+		int rLife=RFighter.getLife();
+		if(rLife!=3) {
+			if(rLife==2)hp4.setVisible(false);
+			else if(rLife==1)hp5.setVisible(false);
+			else {
+				hp6.setVisible(false);
+				//RFighterの負けが確定する
+			}
+		}
 	}
 }
