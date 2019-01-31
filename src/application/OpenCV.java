@@ -137,14 +137,14 @@ public class OpenCV extends BattleModeController implements Runnable{
     			fireBall_R.setLayoutX(fR.getX());
     			if(fR.getX()<-240) {
     				fireBall_R.setOpacity(0);
-    	   			fireBall_R.setTranslateX(fR.getX());
+    	   			fireBall_R.setTranslateX(fR.getX()-25);
         			fireBall_R.setTranslateY(fR.getY());
         			gun_R=false;
     			}
     			Bounds boundsPlayer2 = player2.getBoundsInParent();
     			Bounds boundsFireBallL_1 = fireBall_L.getBoundsInParent();
     			if(boundsPlayer2.intersects(boundsFireBallL_1)) {
-    				if(LFighter.life>=0)RFighter.life-=1;
+    				if(RFighter.life>=0)RFighter.life-=1;
     				System.out.println("右側のプレイヤーが被弾しました。残機は...");
     				System.out.println(RFighter.getLife());
     			}
@@ -154,7 +154,7 @@ public class OpenCV extends BattleModeController implements Runnable{
     			fireBall_L.setLayoutX(fL.getX());
     			if(fL.getX()>240) {
     				fireBall_L.setOpacity(0);
-    	   			fireBall_L.setTranslateX(fL.getX());
+    	   			fireBall_L.setTranslateX(fL.getX()+25);
         			fireBall_L.setTranslateY(fL.getY());
         			gun_L=false;
     			}
@@ -186,6 +186,7 @@ public class OpenCV extends BattleModeController implements Runnable{
 			else {
 				hp3.setVisible(false);
 				//LFighterの負けが確定する
+
 			}
 		}
 		int rLife=RFighter.getLife();
